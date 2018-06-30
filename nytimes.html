@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ <meta charset="utf-8">
+ <title>NYT Article Search</title>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+             
+             
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-4 text-center">NY Times Search</h1>
+                <p class="lead text-center">Use the search criteria below to find what you're looking for.</p>
+            </div>
+        </div>
+             
+        <form>
+    
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Search Term</label>
+                <input type="text" class="form-control" id="searchTerm" placeholder="search">
+                <!-- <input is = "addSearchTerm" type = "submit" value ="Search Term"> -->
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlSelect1">Number of Records to Retrieve</label>
+                <select class="form-control" id="exampleFormControlSelect1">
+                    <option>5</option>
+                    <option>10</option>
+                    <option>15</option>
+                    <option>20</option>
+                    <option>25</option>
+                </select>
+            </div>
+    
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Start Year (Optional:)</label>
+                <input type="text" class="form-control" id="startYear" placeholder="search">
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlInput1">End Year (Optional:)</label>
+                <input type="text" class="form-control" id="endYear" placeholder="search">
+            </div>
+
+            <button type="button" class="btn btn-primary" id="searchButton" value="Search Term">Search</button>
+            <button type="button" class="btn btn-secondary" id="clearResults">Clear Results</button>
+    
+        </form>
+         <div id ="display-window">
+             
+            <div id="results-display"></div>
+        </div>
+
+    </div>
+             
+
+    <!-- See the basic variables we started declaring below to follow the NYT API "param" protocol-->
+    <!-- eventually we need an object the .param method will act on -->
+<script type="text/javascript">
+    $(document).ready(function() {
+        var q;
+        $("#searchButton").on("click", function (event) {
+            event.preventDefault();
+            q = $("#searchTerm").val().trim();
+            console.log(q);
+
+            var beginDate;
+            var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+            url += '?' + $.param({
+            'api-key': "e747bb21e9864e7795fd518abd46f164",
+            'q': q,
+            });
+            $.ajax({
+                url: url,
+                method: 'GET',
+            }).done(function(result) {
+                console.log(result);
+                var artResult = result.response.docs;
+                console.log(artResult);
+                var headline = artResult[0].headline.main;
+                var articleURL = artResult[0].web_url;
+                var headlineDisplay;
+
+                headline = artResult[0].headline.main;
+                console.log(headline);
+                    
+                articleURL = artResult[0].web_url;
+                console.log(articleURL);
+                headlineDisplay = $("#results-display").html("<br>" + "<a href = '" + articleURL + "'>" + headline + "</a>");
+
+                // write a function (then wrap a loop around it) to collect the article title and URL and display them in the empty div
+                // for (i=0; i < artResult.length; i++) {
+                //     headline = artResult[i].headline.print_headline;
+                //     console.log(headline);
+                    
+                //     articleURL = artResult[i].web_url;
+                //     console.log(articleURL);
+                    
+                //     var showHeadline = $("<a>");
+
+                //     headlineDisplay = $("#results-display").html("<a href = '" + articleURL + "'>" + headline + "</a>");
+                //     $("#display-window").prepend(headlineDisplay);
+
+                // }
+            });
+        });
+    })
+</script>
+</body>
+</html>
