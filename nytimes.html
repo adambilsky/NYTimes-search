@@ -51,8 +51,7 @@
             <button type="button" class="btn btn-secondary" id="clearResults">Clear Results</button>
     
         </form>
-         <div id ="display-window">
-             
+         <div id="display-window">
             <div id="results-display"></div>
         </div>
 
@@ -66,6 +65,7 @@
         var q;
         $("#searchButton").on("click", function (event) {
             event.preventDefault();
+            $("#results-display").empty();
             q = $("#searchTerm").val().trim();
             console.log(q);
 
@@ -81,34 +81,35 @@
             }).done(function(result) {
                 console.log(result);
                 var artResult = result.response.docs;
-                console.log(artResult);
-                var headline = artResult[0].headline.main;
-                var articleURL = artResult[0].web_url;
-                var headlineDisplay;
-
-                headline = artResult[0].headline.main;
-                console.log(headline);
-                    
-                articleURL = artResult[0].web_url;
-                console.log(articleURL);
-                headlineDisplay = $("#results-display").html("<br>" + "<a href = '" + articleURL + "'>" + headline + "</a>");
+                // headlineDisplay = $("#results-display").html("<br>" + "<a href = '" + articleURL + "'>" + headline + "</a>");
 
                 // write a function (then wrap a loop around it) to collect the article title and URL and display them in the empty div
-                // for (i=0; i < artResult.length; i++) {
-                //     headline = artResult[i].headline.print_headline;
-                //     console.log(headline);
+                for (i=0; i < artResult.length; i++) {
+                    headline = artResult[i].headline.main;
+                    console.log(headline);
                     
-                //     articleURL = artResult[i].web_url;
-                //     console.log(articleURL);
+                    articleURL = artResult[i].web_url;
+                    console.log(articleURL);
                     
-                //     var showHeadline = $("<a>");
+                    var showHeadline = $("<a>");
+                    articleDiv = $("<div>");
+                    artLink = $("<a href = '" + articleURL + "'>" + headline + "</a>");
+                    articleDiv.append(artLink);
+                    articleDiv.append()
+                    $("#results-display").append(articleDiv);
+                    // $("#results-display").append("<a href = '" + articleURL + "'>" + headline + "</a>");
+                    // $("#display-window").prepend(headlineDisplay);
 
-                //     headlineDisplay = $("#results-display").html("<a href = '" + articleURL + "'>" + headline + "</a>");
-                //     $("#display-window").prepend(headlineDisplay);
-
-                // }
+                }
             });
         });
+        $("#clearResults").on("click", function (event) {
+            event.preventDefault();
+            artResult = "";
+            $("#results-display").empty();
+            $("#searchTerm").val("");
+        });
+
     })
 </script>
 </body>
